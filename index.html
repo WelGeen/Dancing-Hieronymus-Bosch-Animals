@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Dancing Hieronymus Bosch Animals</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<link href="css/remixer.css" media="all" rel="stylesheet" type="text/css">
+		
+		<script src="./build/three.min.js"></script>
+
+		<script src="./_js/loaders/ColladaLoader.js"></script>
+		<script src='./_js/controls/TrackballControls.js'></script>
+		<script src="./js/materials.js"></script>
+		
+		<script src="./js/remixer.js"></script>
+		
+
+	</head>
+	
+	<body>
+		
+	<script>
+	     
+		var renderer, scene, camera, controls, container,textureCube;
+		
+		var dae;
+		var loader = new THREE.ColladaLoader();
+		loader.options.convertUpAxis = true;
+		init();
+		
+		function init() {
+			
+			var selBvh, geometry,material, mesh;
+			
+
+			container = document.createElement( 'div' );
+			document.body.appendChild( container );
+			
+			renderer = new THREE.WebGLRenderer( { preserveDrawingBuffer: true ,antialias: true, alpha: true} );
+		
+			renderer.setClearColor( 0xffffff, 0 ); // default
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.sortObjects = false;
+
+			
+			container.appendChild( renderer.domElement );
+		
+			scene = new THREE.Scene();
+			var dd = 2;
+			camera = new THREE.PerspectiveCamera( 40, (0.45 * window.innerWidth) / (window.innerHeight - 150) , 1, 5000 );
+			camera.position.set( dd*200, dd*150, dd*-300 );
+//controls			
+			controls = new THREE.TrackballControls( camera );
+			controls.rotateSpeed = 4.0;
+			controls.zoomSpeed = 1.2;
+			controls.panSpeed = 0.8;
+			controls.noZoom = false;
+			controls.noPan = false;
+			controls.staticMoving = true;
+			controls.dynamicDampingFactor = 0.3;
+			
+//lights				
+			scene.add( new THREE.AmbientLight( 0x505050 ) );
+		
+			var light = new THREE.SpotLight( 0xffffff, 1.5 );
+			light.position.set( dd*0, dd*1500, dd*1200 );
+		
+			scene.add( light );
+			
+			var light = new THREE.SpotLight( 0xffffff, 1.5 );
+			light.position.set( dd*0, dd*1500, dd*-1200 );
+
+			scene.add( light );
+	
+// ground
+			geometry = new THREE.PlaneBufferGeometry( 6000, 6000, 1, 1 );
+			geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
+			material01 = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide } );
+			mesh = new THREE.Mesh( geometry, material01 );
+			mesh.position.set( 0, 0, 0 );
+			mesh.visible = false;
+		
+			scene.add( mesh );
+			
+// materials 		
+			Material_Lib();
+
+//interface			
+	
+				change_part = function(){
+					var urls = [
+						"./models/dae/Head/head 01.dae", 
+						"./models/dae/Head/head 02.dae", 
+						"./models/dae/Head/head 03.dae",
+						"./models/dae/Head/head 04.dae",
+						"./models/dae/Chest/chest01.dae", 
+						"./models/dae/Chest/chest02.dae",  
+						"./models/dae/Chest/chest03.dae", 
+						"./models/dae/Chest/chest04.dae",
+						"./models/dae/Leg/leg 01.dae", 
+						"./models/dae/Leg/leg 02.dae"
+					];
+					var key = Math.floor(Math.random()*BVH_LIST.length);
+					var id =  Math.floor(Math.random()*urls.length);
+					var url = urls[id];
+
+					loader.load( url, function ( collada ) {
+						BVH_LIST[key].deleteObj('head',collada);
+					});
+
+				}
+				
+				change_color = function(){				
+					for (key in objects) {
+						objects[key].material = mlib[randomKey(mlib)];
+						for (child in objects[key].children) {
+							//console.log (objects[key].children[child].material)
+							objects[key].children[child].material = mlib[randomKey(mlib)];
+						}
+						
+					}
+					for (key in DAE_obj) {
+						//DAE_obj[key].material = mlib[randomKey(mlib)];
+						for (child in DAE_obj[key].children) {
+							//console.log (DAE_obj[key].children[child])
+							DAE_obj[key].children[child].material = mlib[randomKey(mlib)];
+						}
+						
+					}
+				}
+				
+				create = function(){
+
+					for (x=0; x<BVH_LIST.length; x++){
+						BVH_LIST[x].play = false; 
+					}
+
+					
+					var play = BVH_LIST[0].play ? false : true;
+					ani = true;
+					for (x=0; x<BVH_LIST.length; x++){
+						BVH_LIST[x].startTime = play ? (Date.now() - (frame * BVH_LIST[x].secsPerFrame * 2000 ) ) : BVH_LIST[x].startTime;
+						BVH_LIST[x].play = play; 
+					}
+					animate();
+					onWindowResize();
+					
+				}
+				
+				still = function(){
+					var play = BVH_LIST[0].play ? false : true;
+					ani = true;
+					for (x=0; x<BVH_LIST.length; x++){
+						BVH_LIST[x].startTime = play ? (Date.now() - (frame * BVH_LIST[x].secsPerFrame * 2000 ) ) : BVH_LIST[x].startTime;
+						BVH_LIST[x].play = play; 
+					}
+					
+				}
+				
+				reset = function(){
+
+					location.reload();
+					//alert();
+				}
+				
+
+			window.addEventListener( 'resize', onWindowResize, false );
+		}
+
+		requestFile( 'models/bvh/nocchi.txt' );
+		
+	</script>
+	
+		
+	</body>
+</html>

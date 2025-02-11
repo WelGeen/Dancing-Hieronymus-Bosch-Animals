@@ -1,0 +1,27 @@
+body {
+	height: 100%;
+	font-family: 'titilliumbold_upright', sans-serif;
+	font-size: 8px;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	overflow: hidden;
+	margin:0px;
+	background-color: #151515;
+	background-size: cover;
+	cursor: move;
+}
+#loading-div{
+	position: absolute;
+	margin: auto;
+	padding-top: 4px;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 200px;
+	height: 20px;
+	text-align:center;
+	display: block;
+	background-color: black;
+	color: white;
+}
