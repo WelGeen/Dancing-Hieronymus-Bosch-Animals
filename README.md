@@ -13,6 +13,11 @@ Our goal is to enable you to **dance live with the creature** or explore other i
 ## Example
 Check out a dancing creature in action here: [Dancing Creature Demo](https://welgeen.nl/ddance/)
 
+## Inspiration
+[![Look at](https://github.com/WelGeen/Dancing-Hieronymus-Bosch-Animals/blob/main/inspiration/MGM-Ethereal-Costume-Loop_-Autumn-Camel-Cactus-high.gif)](https://www.universaleverything.com/commissions/ethereal)
+
+[![Look at](https://github.com/WelGeen/Dancing-Hieronymus-Bosch-Animals/blob/main/inspiration/MGM-Ethereal-Costume-Loop_-Spring-Lion-Flower-high.gif)](https://www.universaleverything.com/commissions/ethereal)
+
 ## Getting Started
 1. Clone this repository:
    ```bash
